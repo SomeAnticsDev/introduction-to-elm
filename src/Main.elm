@@ -1,31 +1,19 @@
 module Main exposing (main)
 
-import Browser
-import Html exposing (Html, div, img)
-import Html.Attributes exposing (src, style)
-import Html.Events exposing (..)
-import Msg exposing (Msg(..))
-import HelloWorld exposing (helloWorld)
+import Html
 
+-- main = Html.div [] (List.map (\person -> Html.p [] [Html.text (greet person.name person.number)]) people)
 
-main : Program () Int Msg
-main =
-    Browser.sandbox { init = 0, update = update, view = view }
+main = Html.div []
+    (people
+        |> List.sortBy (\person -> person.number)
+        -- |> List.reverse
+        |> List.map (\person -> Html.p [] [Html.text (greet person.name person.number)])
+    )
 
+greet name favoriteNumber = "Hello " ++ name ++ (
+    if favoriteNumber == 17 then "That's my favorite number, too!"
+    else "That's a pretty cool number, friend."
+    )
 
-update : Msg -> number -> number
-update msg model =
-    case msg of
-        Increment ->
-            model + 1
-
-        Decrement ->
-            model - 1
-
-
-view : Int -> Html Msg
-view model =
-    div []
-        [ img [ src "/logo.png", style "width" "300px" ] []
-        , helloWorld model
-        ]
+people = [{name = "Lindsay", number = 17}, {name = "Ben", number = 14}]
